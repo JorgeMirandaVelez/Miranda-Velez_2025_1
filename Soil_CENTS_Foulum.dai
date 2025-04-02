@@ -1,0 +1,122 @@
+;;Soil for the CENTS experiment made with texture reported by schjønning 1999 and generic Foulumgaard parameters.
+;;With inputs from Gömez-Muñoz et al. 2021 for C% and BD in 0-40 cm depth
+;;Hydraulic properties determined by HYPRES
+
+(input file "dk-horizon.dai")
+(input file "chemistry.dai")
+
+;;Horizons
+(defhorizon "Foulum AP Hy" ISSS4
+    (clay 0.085)
+    (silt 0.085)
+    (fine_sand 0.590)
+    (coarse_sand 0.205)
+    (humus 0.035)
+    (C_per_N 11.2)
+    (dry_bulk_density 1.35)  
+    (hydraulic hypres))
+
+(defhorizon "Foulum A1 Hy" ISSS4
+    (clay 0.100)
+    (silt 0.110)
+    (fine_sand 0.540)
+    (coarse_sand 0.220)
+    (humus 0.030)
+    (C_per_N 11.2)
+    (dry_bulk_density 1.35)  
+    (hydraulic hypres))
+
+(defhorizon "Foulum A2 Hy" ISSS4
+    (clay 0.115)
+    (silt 0.115)
+    (fine_sand 0.500)
+    (coarse_sand 0.247)
+    (humus 0.023)
+    (C_per_N 11.2)
+    (dry_bulk_density 1.45)  
+    (hydraulic hypres))
+
+(defhorizon "Foulum B1 Hy" ISSS4
+    (clay 0.129)
+    (silt 0.115)
+    (fine_sand 0.480)
+    (coarse_sand 0.271)
+    (humus 0.005)
+    (C_per_N 11.3)
+    (dry_bulk_density 1.65) 
+    (hydraulic hypres))
+
+(defhorizon "Foulum B2 Hy" ISSS4
+    (clay 0.129)
+    (silt 0.115)
+    (fine_sand 0.480)
+    (coarse_sand 0.271)
+    (humus 0.005)
+    (C_per_N 11.3)
+    (dry_bulk_density 1.75) 
+    (hydraulic hypres))
+
+(defhorizon "Foulum C Hy" ISSS4
+    (clay 0.148)
+    (silt 0.100)
+    (fine_sand 0.550)
+    (coarse_sand 0.200)
+    (humus 0.002)
+    (normalize true)
+    (C_per_N 9.1)
+    (dry_bulk_density 1.81) 
+    (hydraulic hypres))
+
+
+
+;;Column
+(defcolumn "Foulum_Schjoenning_1992" default 
+	(Soil 
+		(horizons (-20 [cm] "Foulum AP Hy") 
+			  (-30 [cm] "Foulum A1 Hy") 
+			  (-40 [cm] "Foulum A2 Hy") 
+			  (-60 [cm] "Foulum B1 Hy") 
+			  (-80 [cm] "Foulum B2 Hy")
+			  (-100 [cm] "Foulum C Hy")
+			  (-220 [cm] "Foulum C Hy"))
+		(MaxRootingDepth 220.0 [cm])
+	)
+	(Bioclimate default
+		(pet PM)
+	)
+	(Movement vertical 
+		(Tertiary none)
+		(Geometry
+			(zplus  -0.5 -1 -2 -3 -4 -5 -7 -9 -11 -13 -15 -17 -19 -20 -21 -25 -30 -35 -40 -45 -49 -50 -51 -55 -60 -65 -70 -75 -80 -85 -90 -95 -96 -97 -98 -99 -100 -101 -102 -103 -105 -110 -111 -115 -120 -130 -140 -150 -160 -170 -180 -190 -200 -220 [cm])
+		)
+	)
+	(OrganicMatter original
+		(init 
+			(input 10875 [kg C/ha/y])
+			(root 5390 [kg C/ha/y])
+			(end -25 [cm])
+		)
+		(Bioincorporation
+			(R_max 0.1 [g DM/m^2/h])
+		)
+	)
+	(Groundwater deep)
+	(Chemistry multi
+		(combine
+			(N
+							(reaction
+								(denitrification 
+									(K 0.020833 [h^-1])
+									(alpha 0.1 [(g NO3-N/h)/(g CO2-C/h)]);;0.1
+									(water_factor (0.7 0)(1.0 1.0));;(orig. (0.7 0)(1.0 1.0))
+									(K_fast 0.020833 [h^-1])
+									(alpha_fast 0.1 [(g NO3-N/h)/(g CO2-C/h)])
+									(water_factor_fast (0.7 0)(1.0 1.0))
+								)
+								(nitrification)
+							)
+			)
+		)
+	)
+
+)
